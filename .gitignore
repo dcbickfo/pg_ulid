@@ -4,11 +4,16 @@
 *.bc
 *.a
 *.dylib
+*.dSYM/
 
 # Build directories
 cmake-build-*/
 build/
 out/
+
+# CMake and build system artifacts
+compile_commands.json
+.clangd/
 
 # IDE
 .idea/
@@ -31,6 +36,3 @@ results/
 
 # Claude Code
 .claude/
-
-# Project-specific
-CMakeLists.txt

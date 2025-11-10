@@ -46,12 +46,14 @@ jobs:
 
       - name: Run tests
         run: |
-          sudo make installcheck PG_CONFIG=/usr/lib/postgresql/${{ matrix.pg }}/bin/pg_config PGUSER=postgres
+          sudo -u postgres make installcheck PG_CONFIG=/usr/lib/postgresql/${{ matrix.pg }}/bin/pg_config
 
       - name: Show regression diffs on failure
         if: failure()
         run: |
-          if [ -f regression.diffs ]; then
+          if [ -f out/regression.diffs ]; then
+            cat out/regression.diffs
+          elif [ -f regression.diffs ]; then
             cat regression.diffs
           fi
 
