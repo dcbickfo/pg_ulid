@@ -44,9 +44,16 @@ jobs:
           sudo systemctl start postgresql
           sudo -u postgres psql -c "CREATE DATABASE contrib_regression;"
 
+      - name: Prepare test environment
+        run: |
+          # Create output directory with proper permissions
+          mkdir -p out
+          sudo chmod -R 755 .
+          sudo chmod 777 out
+
       - name: Run tests
         run: |
-          sudo -u postgres make installcheck PG_CONFIG=/usr/lib/postgresql/${{ matrix.pg }}/bin/pg_config
+          make installcheck PG_CONFIG=/usr/lib/postgresql/${{ matrix.pg }}/bin/pg_config PGUSER=postgres
 
       - name: Show regression diffs on failure
         if: failure()
