@@ -1,0 +1,61 @@
+# Makefile.lint - Code quality tools for ULID PostgreSQL extension
+#
+# Usage:
+#   make -f Makefile.lint format     # Format code with clang-format
+#   make -f Makefile.lint lint       # Run clang-tidy linter
+#   make -f Makefile.lint check      # Run both format check and lint
+#   make -f Makefile.lint format-check # Check if formatting is needed
+
+# Source files
+SRC_FILES = src/ulid.c
+HDR_FILES = src/ulid.h
+
+# PostgreSQL configuration
+PG_CONFIG ?= pg_config
+PG_INCLUDEDIR = $(shell $(PG_CONFIG) --includedir-server)
+
+# Compiler flags for clang-tidy
+TIDY_FLAGS = -I$(PG_INCLUDEDIR) -I. -Isrc
+
+.PHONY: all format lint check format-check help
+
+all: check
+
+help:
+	@echo "Code quality targets:"
+	@echo "  make -f Makefile.lint format        - Format all C files"
+	@echo "  make -f Makefile.lint lint          - Run static analysis"
+	@echo "  make -f Makefile.lint check         - Run format check and lint"
+	@echo "  make -f Makefile.lint format-check  - Check if formatting needed"
+
+# Format all C source and header files
+format:
+	@echo "Formatting C files..."
+	@command -v clang-format >/dev/null 2>&1 || \
+		{ echo "Error: clang-format not found. Install with: brew install clang-format"; exit 1; }
+	clang-format -i $(SRC_FILES) $(HDR_FILES)
+	@echo "Formatting complete!"
+
+# Check if files need formatting (non-destructive)
+format-check:
+	@echo "Checking code formatting..."
+	@command -v clang-format >/dev/null 2>&1 || \
+		{ echo "Error: clang-format not found. Install with: brew install clang-format"; exit 1; }
+	@clang-format --dry-run --Werror $(SRC_FILES) $(HDR_FILES) && \
+		echo "✓ All files are properly formatted" || \
+		{ echo "✗ Some files need formatting. Run: make -f Makefile.lint format"; exit 1; }
+
+# Run static analysis with clang-tidy
+lint:
+	@echo "Running static analysis..."
+	@command -v clang-tidy >/dev/null 2>&1 || \
+		{ echo "Error: clang-tidy not found. Install with: brew install llvm"; exit 1; }
+	@for file in $(SRC_FILES); do \
+		echo "Checking $$file..."; \
+		clang-tidy $$file -- $(TIDY_FLAGS) || exit 1; \
+	done
+	@echo "✓ Static analysis complete!"
+
+# Run all checks
+check: format-check lint
+	@echo "✓ All code quality checks passed!"

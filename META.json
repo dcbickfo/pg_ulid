@@ -1,0 +1,66 @@
+{
+   "name": "pg_ulid",
+   "abstract": "ULID (Universally Unique Lexicographically Sortable Identifier) data type for PostgreSQL",
+   "description": "Provides a native ULID data type with full operator support, indexing (B-tree and hash), and optimized sorting. ULIDs are 128-bit identifiers with embedded timestamps that are lexicographically sortable.",
+   "version": "0.1.0",
+   "license": "mit",
+   "release_status": "stable",
+   "provides": {
+      "pg_ulid": {
+         "abstract": "ULID data type with operators and functions",
+         "file": "pg_ulid--0.1.0.sql",
+         "docfile": "doc/ulid.md",
+         "version": "0.1.0"
+      }
+   },
+   "prereqs": {
+      "runtime": {
+         "requires": {
+            "PostgreSQL": "12.0"
+         },
+         "recommends": {
+            "PostgreSQL": "18.0"
+         }
+      },
+      "build": {
+         "requires": {
+            "PostgreSQL": "12.0"
+         }
+      },
+      "test": {
+         "requires": {
+            "PostgreSQL": "12.0"
+         }
+      }
+   },
+   "no_index": {
+      "directory": [
+         "test",
+         "out",
+         ".github"
+      ]
+   },
+   "resources": {
+      "bugtracker": {
+         "web": "https://github.com/dcbickfo/pg_ulid/issues"
+      },
+      "repository": {
+         "url": "https://github.com/dcbickfo/pg_ulid.git",
+         "web": "https://github.com/dcbickfo/pg_ulid",
+         "type": "git"
+      }
+   },
+   "generated_by": "David",
+   "meta-spec": {
+      "version": "1.0.0",
+      "url": "https://pgxn.org/spec/"
+   },
+   "tags": [
+      "ulid",
+      "identifier",
+      "uuid",
+      "sortable",
+      "timestamp",
+      "data type"
+   ]
+}

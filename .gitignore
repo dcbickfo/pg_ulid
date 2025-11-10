@@ -1,0 +1,36 @@
+# Build artifacts
+*.o
+*.so
+*.bc
+*.a
+*.dylib
+
+# Build directories
+cmake-build-*/
+build/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Test outputs
+regression.diffs
+regression.out
+results/
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.tmp
+/tmp/
+
+# Claude Code
+.claude/
+
+# Project-specific
+CMakeLists.txt

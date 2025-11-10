@@ -1,0 +1,40 @@
+# clang-tidy configuration for PostgreSQL C extensions
+#
+# Usage:
+#   clang-tidy src/*.c -- -I/path/to/postgresql/include/server
+
+---
+Checks: >
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-assignment-in-if-condition,
+  cert-*,
+  -cert-dcl03-c,
+  clang-analyzer-*,
+  concurrency-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -readability-identifier-length,
+  -readability-magic-numbers,
+  -readability-function-cognitive-complexity,
+  -readability-avoid-const-params-in-decls,
+  -readability-non-const-parameter
+
+CheckOptions:
+  - key: readability-function-size.LineThreshold
+    value: '200'
+  - key: readability-function-size.StatementThreshold
+    value: '100'
+  - key: readability-identifier-naming.FunctionCase
+    value: 'lower_case'
+  - key: readability-identifier-naming.VariableCase
+    value: 'lower_case'
+  - key: readability-identifier-naming.ConstantCase
+    value: 'UPPER_CASE'
+  - key: readability-identifier-naming.MacroCase
+    value: 'UPPER_CASE'
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file

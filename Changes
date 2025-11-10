@@ -1,0 +1,14 @@
+Revision history for PostgreSQL extension ulid
+
+0.1.0   2025-01-04
+      - Initial release
+      - Native ULID data type implementation
+      - Full operator support (comparison, equality)
+      - B-tree index support with optimized sorting (abbreviated keys)
+      - Hash index support
+      - Binary send/receive for efficient data transfer
+      - PARALLEL SAFE functions for query parallelization
+      - Comprehensive regression tests
+      - Docker-based testing infrastructure
+      - Multi-version PostgreSQL support (12-18)
+      - PGXN distribution ready

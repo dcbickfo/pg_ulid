@@ -1,0 +1,16 @@
+# Exclude development files from PGXN distribution bundles
+.gitignore export-ignore
+.gitattributes export-ignore
+.github export-ignore
+.idea export-ignore
+cmake-build-debug export-ignore
+CMakeLists.txt export-ignore
+test.sh export-ignore
+Dockerfile export-ignore
+*.o export-ignore
+*.bc export-ignore
+*.so export-ignore
+regression.diffs export-ignore
+regression.out export-ignore
+results export-ignore
+out export-ignore
