@@ -1,5 +1,0 @@
-comment = 'ulid datatype for postgres'
-default_version = '0.1.0'
-superuser = true
-relocatable = true
-module_pathname = '$libdir/ulid'

@@ -8,13 +8,13 @@
 # Clean: make clean
 # Dist: make dist (create PGXN distribution)
 
-EXTENSION = ulid
+EXTENSION = pg_ulid
 MODULES = ulid
 
 # Extract version from META.json
 EXTVERSION = $(shell grep '"version"' META.json | head -1 | sed -E 's/.*"version": "(.*)".*/\1/')
 
-DATA = ulid--$(EXTVERSION).sql
+DATA = pg_ulid--$(EXTVERSION).sql
 DOCS = README.md doc/ulid.md Changes
 
 # Test configuration (PGXN standard structure)

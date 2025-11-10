@@ -1,6 +1,6 @@
 SET client_min_messages = error;
 \set ECHO none
-CREATE EXTENSION ulid;
+CREATE EXTENSION pg_ulid;
 \set ECHO all
 
 CREATE TABLE ulids (
