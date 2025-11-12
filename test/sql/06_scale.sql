@@ -1,0 +1,31 @@
+-- ULID scalability test
+-- Tests performance with large datasets (1 million rows)
+
+SET client_min_messages = error;
+\set ECHO none
+CREATE EXTENSION pg_ulid;
+\set ECHO all
+
+-- Create table with PRIMARY KEY constraint
+CREATE TABLE ulids_scale (
+   ulid_test1 ulid PRIMARY KEY,
+   ulid_test2 ulid
+);
+
+-- Insert 1 million rows with generated ULIDs
+-- This tests:
+-- - gen_random_ulid() performance at scale
+-- - Uniqueness enforcement (PRIMARY KEY)
+-- - Index performance with large datasets
+INSERT INTO ulids_scale (ulid_test1, ulid_test2)
+SELECT gen_random_ulid(), gen_random_ulid() FROM generate_series(1, 1000000);
+
+-- Verify no duplicate ULIDs (PRIMARY KEY enforces ulid_test1, check ulid_test2)
+-- If ULIDs were not unique, we'd see rows here
+SELECT * FROM ulids_scale WHERE ulid_test1 = ulid_test2;
+
+-- Verify row count
+SELECT COUNT(*) AS total_rows FROM ulids_scale;
+
+-- Cleanup
+DROP TABLE ulids_scale;

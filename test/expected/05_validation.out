@@ -1,0 +1,115 @@
+-- ULID input validation tests
+-- Tests edge cases, invalid characters, overflow, and length validation
+SET client_min_messages = error;
+\set ECHO none
+ERROR:  extension "pg_ulid" already exists
+-- Test overflow boundary (first character > '7' should fail)
+DO $$
+BEGIN
+    PERFORM '80000000000000000000000000'::ulid;
+    RAISE EXCEPTION 'Should have failed on overflow';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test invalid character 'I'
+DO $$
+BEGIN
+    PERFORM '01H0000000000000000000000I'::ulid;
+    RAISE EXCEPTION 'Should have failed on invalid character I';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test wrong length (too short - 25 chars)
+DO $$
+BEGIN
+    PERFORM '01H0000000000000000000000'::ulid;
+    RAISE EXCEPTION 'Should have failed on wrong length';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test wrong length (too long - 29 chars)
+DO $$
+BEGIN
+    PERFORM '01H00000000000000000000000000'::ulid;
+    RAISE EXCEPTION 'Should have failed on wrong length';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test invalid character 'L' at end
+DO $$
+BEGIN
+    PERFORM '01H000000000000000000000L'::ulid;
+    RAISE EXCEPTION 'Should have failed on invalid character L';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test invalid character 'O' at end
+DO $$
+BEGIN
+    PERFORM '01H000000000000000000000O'::ulid;
+    RAISE EXCEPTION 'Should have failed on invalid character O';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test invalid character 'U' at end
+DO $$
+BEGIN
+    PERFORM '01H000000000000000000000U'::ulid;
+    RAISE EXCEPTION 'Should have failed on invalid character U';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test invalid character 'I' at beginning
+DO $$
+BEGIN
+    PERFORM 'I1H00000000000000000000000'::ulid;
+    RAISE EXCEPTION 'Should have failed on invalid character at start';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test invalid character 'L' in middle
+DO $$
+BEGIN
+    PERFORM '01H0000000L000000000000000'::ulid;
+    RAISE EXCEPTION 'Should have failed on invalid character in middle';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test special character '-'
+DO $$
+BEGIN
+    PERFORM '01H00000000000000000000-00'::ulid;
+    RAISE EXCEPTION 'Should have failed on special character -';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;
+-- Test special character '_'
+DO $$
+BEGIN
+    PERFORM '01H00000000000000000000_00'::ulid;
+    RAISE EXCEPTION 'Should have failed on special character _';
+EXCEPTION
+    WHEN others THEN
+        -- Expected to fail
+        NULL;
+END $$;

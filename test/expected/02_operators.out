@@ -1,0 +1,80 @@
+-- ULID comparison operator tests
+-- Tests all comparison operators: =, <>, <, <=, >, >=
+SET client_min_messages = error;
+\set ECHO none
+ERROR:  extension "pg_ulid" already exists
+-- Create test table
+CREATE TABLE ulids_ops (
+    ulid_test1 ulid,
+    ulid_test2 ulid
+);
+-- Insert test data with known values
+INSERT INTO ulids_ops (ulid_test1, ulid_test2)
+VALUES
+    ('01H00000000000000000000000', '01H00000000000000000000000'),
+    ('02000000000000000000000000', '02000000000000000000000000'),
+    ('07000000000000000000000000', '07000000000000000000000000');
+-- Test less than or equal (<=)
+SELECT ulid_test1 FROM ulids_ops WHERE ulid_test1 <= '07000000000000000000000000' ORDER BY ulid_test1;
+         ulid_test1         
+----------------------------
+ 01H00000000000000000000000
+ 02000000000000000000000000
+ 07000000000000000000000000
+(3 rows)
+
+-- Test less than (<)
+SELECT ulid_test1 FROM ulids_ops WHERE ulid_test1 < '07000000000000000000000000' ORDER BY ulid_test1;
+         ulid_test1         
+----------------------------
+ 01H00000000000000000000000
+ 02000000000000000000000000
+(2 rows)
+
+-- Test greater than or equal (>=)
+SELECT ulid_test1 FROM ulids_ops WHERE ulid_test1 >= '02000000000000000000000000' ORDER BY ulid_test1;
+         ulid_test1         
+----------------------------
+ 02000000000000000000000000
+ 07000000000000000000000000
+(2 rows)
+
+-- Test greater than (>)
+SELECT ulid_test1 FROM ulids_ops WHERE ulid_test1 > '01H00000000000000000000000' ORDER BY ulid_test1;
+         ulid_test1         
+----------------------------
+ 02000000000000000000000000
+ 07000000000000000000000000
+(2 rows)
+
+-- Test not equal (<>)
+SELECT ulid_test1 FROM ulids_ops WHERE ulid_test1 <> '02000000000000000000000000' ORDER BY ulid_test1;
+         ulid_test1         
+----------------------------
+ 01H00000000000000000000000
+ 07000000000000000000000000
+(2 rows)
+
+-- Test equal (=)
+SELECT ulid_test1 FROM ulids_ops WHERE ulid_test1 = '01H00000000000000000000000';
+         ulid_test1         
+----------------------------
+ 01H00000000000000000000000
+(1 row)
+
+-- Test hash index equality
+SELECT ulid_test2 FROM ulids_ops WHERE ulid_test2 = '01H00000000000000000000000';
+         ulid_test2         
+----------------------------
+ 01H00000000000000000000000
+(1 row)
+
+SELECT ulid_test2 FROM ulids_ops WHERE ulid_test2 <> '02000000000000000000000000' ORDER BY ulid_test2;
+         ulid_test2         
+----------------------------
+ 01H00000000000000000000000
+ 07000000000000000000000000
+(2 rows)
+
+-- Cleanup
+DROP TABLE ulids_ops;

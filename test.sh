@@ -27,7 +27,7 @@ fi
 
 echo "Testing with PostgreSQL ${PG_VERSION}..."
 docker run --rm -w /repo --volume "$PWD:/repo" pgxn/pgxn-tools \
-    sh -c "pg-start ${PG_VERSION} && pg-build-test"
+    sh -c "pg-start ${PG_VERSION} && make clean && pg-build-test"
 
 # Check for test failures
 if [ -f out/regression.diffs ]; then
